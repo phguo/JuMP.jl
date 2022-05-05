@@ -42,15 +42,15 @@ for i in 1:q
 end
 @objective(aOpt, Min, sum(u))
 optimize!(aOpt)
-objective_value(aOpt)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">5.0412636484980755</code></pre><pre><code class="language-julia hljs">value.(np)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8-element Vector{Float64}:
- 1.747945718805369
- 1.1153130074864266
- 1.288808299639784e-7
- 1.661952499684036
- 2.9999994121581453
- 0.8414258334554227
- 1.3825595386035296
- 2.25080346403116</code></pre><h2 id="E-optimal-design"><a class="docs-heading-anchor" href="#E-optimal-design">E-optimal design</a><a id="E-optimal-design-1"></a><a class="docs-heading-anchor-permalink" href="#E-optimal-design" title="Permalink"></a></h2><p>In <span>$E$</span> -optimal design, we minimize the norm of the error covariance matrix, i.e. the maximum eigenvalue of <span>$E$</span>.</p><p>Since the diameter (twice the longest semi-axis) of the confidence ellipsoid <span>$\mathcal{E}$</span> is proportional to <span>$\|E\|_{2}^{1 / 2}$</span>, minimizing <span>$\|E\|_{2}$</span> can be interpreted geometrically as minimizing the diameter of the confidence ellipsoid.</p><p>E-optimal design can also be interpreted as minimizing the maximum variance of <span>$q^{T} e$</span>, over all <span>$q$</span> with <span>$\|q\|_{2}=1$</span>. The E-optimal experiment design problem in SDP form is:</p><p class="math-container">\[\begin{aligned}
+objective_value(aOpt)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">5.041263648498078</code></pre><pre><code class="language-julia hljs">value.(np)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8-element Vector{Float64}:
+ 1.7479457188053382
+ 1.1153130074864352
+ 1.288808259428507e-7
+ 1.6619524996840345
+ 2.999999412158156
+ 0.8414258334554294
+ 1.382559538603529
+ 2.250803464031185</code></pre><h2 id="E-optimal-design"><a class="docs-heading-anchor" href="#E-optimal-design">E-optimal design</a><a id="E-optimal-design-1"></a><a class="docs-heading-anchor-permalink" href="#E-optimal-design" title="Permalink"></a></h2><p>In <span>$E$</span> -optimal design, we minimize the norm of the error covariance matrix, i.e. the maximum eigenvalue of <span>$E$</span>.</p><p>Since the diameter (twice the longest semi-axis) of the confidence ellipsoid <span>$\mathcal{E}$</span> is proportional to <span>$\|E\|_{2}^{1 / 2}$</span>, minimizing <span>$\|E\|_{2}$</span> can be interpreted geometrically as minimizing the diameter of the confidence ellipsoid.</p><p>E-optimal design can also be interpreted as minimizing the maximum variance of <span>$q^{T} e$</span>, over all <span>$q$</span> with <span>$\|q\|_{2}=1$</span>. The E-optimal experiment design problem in SDP form is:</p><p class="math-container">\[\begin{aligned}
 \min &amp; t \\
 \text{subject to} &amp; \sum_{i=1}^{p} \lambda_{i} v_{i} v_{i}^{T} \succeq t I \\
 &amp; \lambda \succeq 0 \\
@@ -67,15 +67,15 @@ set_silent(eOpt)
 @constraint(eOpt, sum(np) &lt;= n)
 @objective(eOpt, Max, t)
 optimize!(eOpt)
-objective_value(eOpt)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">0.44896306556366</code></pre><pre><code class="language-julia hljs">value.(np)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8-element Vector{Float64}:
-  2.9999591973576862
-  0.6746121070433458
- -4.077828668073517e-5
-  1.0453736634429782
-  2.999976477144745
-  1.7873172744476913
-  0.3017495901336785
-  2.1911100940002943</code></pre><h2 id="D-optimal-design"><a class="docs-heading-anchor" href="#D-optimal-design">D-optimal design</a><a id="D-optimal-design-1"></a><a class="docs-heading-anchor-permalink" href="#D-optimal-design" title="Permalink"></a></h2><p>The most widely used scalarization is called <span>$D$</span> -optimal design, in which we minimize the determinant of the error covariance matrix <span>$E$</span>. This corresponds to designing the experiment to minimize the volume of the resulting confidence ellipsoid (for a fixed confidence level). Ignoring the constant factor <span>$1 / m$</span> in <span>$E$</span>, and taking the logarithm of the objective, we can pose this problem as convex optimization problem:</p><p class="math-container">\[\begin{aligned}
+objective_value(eOpt)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">0.44896306555844545</code></pre><pre><code class="language-julia hljs">value.(np)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8-element Vector{Float64}:
+  2.9999591973545146
+  0.6746121071876662
+ -4.07782903818687e-5
+  1.0453736634723743
+  2.9999764771395725
+  1.7873172746516859
+  0.30174959010420294
+  2.1911100936734083</code></pre><h2 id="D-optimal-design"><a class="docs-heading-anchor" href="#D-optimal-design">D-optimal design</a><a id="D-optimal-design-1"></a><a class="docs-heading-anchor-permalink" href="#D-optimal-design" title="Permalink"></a></h2><p>The most widely used scalarization is called <span>$D$</span> -optimal design, in which we minimize the determinant of the error covariance matrix <span>$E$</span>. This corresponds to designing the experiment to minimize the volume of the resulting confidence ellipsoid (for a fixed confidence level). Ignoring the constant factor <span>$1 / m$</span> in <span>$E$</span>, and taking the logarithm of the objective, we can pose this problem as convex optimization problem:</p><p class="math-container">\[\begin{aligned}
 \min &amp; \log \operatorname{det}\left(\sum_{i=1}^{p} \lambda_{i} v_{i} v_{i}^{T}\right)^{-1} \\
 \text{subject to} &amp; \lambda \succeq 0 \\
 &amp; \mathbf{1}^{T} \lambda=1
@@ -91,12 +91,12 @@ E = V * LinearAlgebra.diagm(0 =&gt; np ./ n) * V&#39;
     [t, 1, (E[i, j] for i in 1:q for j in 1:i)...] in MOI.LogDetConeTriangle(q)
 )
 optimize!(dOpt)
-objective_value(dOpt)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">0.19012932811233788</code></pre><pre><code class="language-julia hljs">value.(np)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8-element Vector{Float64}:
- 8.947286889821718e-5
- 2.5660639516185197
- 0.00014367738919698677
- 0.26257069021947865
- 2.9421090046954608
- 2.39212443758168
- 2.8368058541508545
- 0.9999018965107976</code></pre><hr/><div class="admonition is-success"><header class="admonition-header">Tip</header><div class="admonition-body"><p>This tutorial was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>. <a href="https://github.com/jump-dev/JuMP.jl/blob/master/docs/src/tutorials/conic/experiment_design.jl">View the source <code>.jl</code> file on GitHub</a>.</p></div></div></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../corr_sdp/">« The correlation problem</a><a class="docs-footer-nextpage" href="../max_cut_sdp/">SDP relaxations: max-cut »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.16 on <span class="colophon-date" title="Friday 29 April 2022 00:53">Friday 29 April 2022</span>. Using Julia version 1.6.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+objective_value(dOpt)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">0.19012932813962619</code></pre><pre><code class="language-julia hljs">value.(np)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8-element Vector{Float64}:
+ 8.947286935206088e-5
+ 2.566063951619563
+ 0.00014367738956183864
+ 0.26257069021770724
+ 2.9421090046924143
+ 2.3921244375834045
+ 2.8368058541519123
+ 0.9999018965103584</code></pre><hr/><div class="admonition is-success"><header class="admonition-header">Tip</header><div class="admonition-body"><p>This tutorial was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>. <a href="https://github.com/jump-dev/JuMP.jl/blob/master/docs/src/tutorials/conic/experiment_design.jl">View the source <code>.jl</code> file on GitHub</a>.</p></div></div></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../corr_sdp/">« The correlation problem</a><a class="docs-footer-nextpage" href="../max_cut_sdp/">SDP relaxations: max-cut »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.16 on <span class="colophon-date" title="Thursday 5 May 2022 20:51">Thursday 5 May 2022</span>. Using Julia version 1.6.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
